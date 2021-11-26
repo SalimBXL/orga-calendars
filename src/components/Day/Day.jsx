@@ -28,7 +28,11 @@ const Day = ({id, sunday, jobs, absence}) => {
                 <span className = "absence"><sup><small>{absence.absence}</small></sup></span>
             }
 
-            <span className = "job">{jobs && jobs.join(" ")}</span>
+            <div className = "job">
+                <span className = "badge bg-primary">
+                    {jobs && jobs.join(" ")}
+                </span>
+            </div>
 
         </td>
     )

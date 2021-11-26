@@ -1,28 +1,23 @@
 import React from "react"
 import PropTypes from 'prop-types';
-import UserLine from "../UserLine/UserLine"
+import Week from "../Week/Week"
+
 
 const Table = ({jobs, absences, allUsers}) => {
-    
+
     const users = [];
-    if (allUsers) {
-        users.push(...allUsers);
-    } else {
-        jobs.map(({user}) => {
-            if (!users.includes(user)) users.push(user)
-            return null
-        })
-        absences.map(({user}) => {
-            if (!users.includes(user)) users.push(user)
-            return null
-        })
-    }
+
+    if (allUsers && allUsers.length > 0) users.push(...allUsers);
+
+    jobs.map(({user}) => (!users.includes(user)) && users.push(user))
+    absences.map(({user}) => (!users.includes(user)) && users.push(user))
 
     const rows = []
     users.map((user) => {
-        const events = jobs.filter((event) => event.user === user)
-        const abs = absences.filter((a) => a.user === user)
-        rows.push(<UserLine key={user.toString()} user={user} events={events} absences={abs}/>)
+        const jbs = jobs.filter((j) => j.user.id === user.id)
+        const abs = absences.filter((a) => a.user.id === user.id)
+        const key = "week_user_id_" + user.id.toString(); 
+        rows.push(<Week key={key} user={user} jobs={jbs} absences={abs}/>)
         return null;
     })
     

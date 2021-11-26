@@ -2,20 +2,20 @@ import React from "react"
 import PropTypes from 'prop-types';
 import Day from "../Day/Day"
 
-const Week = ({events, absences}) => {
-    
+
+const Week = ({user, jobs, absences}) => {
     const days = [
         { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""},
     ]
 
-    events.map((event, index) => {
-        const d = new Date(event.date)
+    jobs.map((job) => {
+        const d = new Date(job.date)
         const numeroJour = d.getDay()
-        days[numeroJour].j = event.jobs
+        days[numeroJour].j = job.jobs
         return null;
     })
 
-    absences.map((absence, index) => {
+    absences.map((absence) => {
         const d = new Date(absence.date)
         const numeroJour = d.getDay()
         days[numeroJour].a = {
@@ -25,17 +25,27 @@ const Week = ({events, absences}) => {
         return null;
     })
 
-    return days.map((day, index) => 
-        (index !== 0) && (
-            (index !== 6)
-                ? <Day id={index} sunday={false} key={index.toString()} jobs={day.j} absence={day.a} />
-                : <Day id={index} sunday={true} key={index.toString()} jobs={day.j} absence={day.a} />
-        )
+    return (
+        <tr >
+            <td >{user.fullname}</td>
+            {days.map((day, index) => 
+                (index !== 0) && (
+                    (index !== 6)
+                        ? <Day id={index} sunday={false} 
+                                key={"user_id_"+ user.id +"_day_" + index.toString()} 
+                                jobs={day.j} absence={day.a} />
+                        : <Day id={index} sunday={true} 
+                                key={"user_id_"+ user.id +"day_" + index.toString()} 
+                                jobs={day.j} absence={day.a} />
+                )
+            )}
+        </tr>
     )
 }
 
 Week.prototype = {
-    events: PropTypes.array,
+    user: PropTypes.string.isRequired,
+    jobs: PropTypes.array,
     absences: PropTypes.array
 }
 
