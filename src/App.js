@@ -8,6 +8,9 @@ function App() {
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const [department, setDepartment] = useState("");
+  const [fromTo, setFromTo] = useState({});
   
   const [planningJobs, setPlanningJobs] = useState([]);
   const [showJobs, setShowJobs] = useState(true);
@@ -26,7 +29,7 @@ function App() {
   }
 
   const [planningAbsences, setPlanningAbsences] = useState([]);
-  const [showAbsences, setShowAbsences] = useState(false);
+  const [showAbsences, setShowAbsences] = useState(true);
   const [absences, setAbsences] = useState([]);
   const handleAbsences = ({target}) => {
     setShowAbsences((prev) => !prev)
@@ -46,6 +49,9 @@ function App() {
       .then(
         (result) => {
           setIsLoaded(true);
+
+          setDepartment(result.department);
+          setFromTo(result.dates);
 
           const myMap = new Map();
           result.users.map((user) => myMap.set(user.id, user));
@@ -80,6 +86,10 @@ function App() {
   }, [planningJobs]);
 
   useEffect(() => {
+    setAbsences(planningAbsences);
+  }, [planningAbsences]);
+
+  useEffect(() => {
     setTasks(planningTasks);
   }, [planningTasks]);
 
@@ -93,10 +103,18 @@ function App() {
       <div>
         <h1>TEST</h1>
 
-        
-        
         <div id="FilterableTable" className="container p-3 my-3 border">
-          <h2>Week Calendar</h2>
+
+          <div className="d-flex justify-content-between mb-3">
+            <div className="p-2">
+              <h2>Week Calendar</h2>
+              <span className="badge rounded-pill bg-secondary">
+                {fromTo.from} -- {fromTo.to}
+              </span>
+            </div>
+            <div className="p-2"><h4>{department.service} {department.location}</h4></div>
+          </div>
+
 
           <Options 
             showJobs={showJobs} handleJobs={handleJobs}
