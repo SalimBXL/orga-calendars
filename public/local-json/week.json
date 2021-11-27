@@ -1,5 +1,9 @@
 {
     "time_zone": "UTC+1",
+    "departement": {
+        "location": "Erasme",
+        "service": "Cyclotron"
+    },
     "users": [ 
         { "id": 0, "fullname": "Salim Joly" },
         { "id": 1, "fullname": "user1 user1"}, 
