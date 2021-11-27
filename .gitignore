@@ -6,7 +6,7 @@
 .pnp.js
 
 # Salim
-/public/local-json
+/public/local-json/
 
 # testing
 /coverage
