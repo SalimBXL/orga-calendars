@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react"
 import DayCalendar from "./DayCalendar"
 import WeekCalendar from "./WeekCalendar"
 import Options from "./components/Options/Options";
-import PropTypes from 'prop-types';
 
-const Calendar = ({calendar}) => {
+const Calendar = () => {
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -104,23 +103,18 @@ const Calendar = ({calendar}) => {
                             showTasks={showTasks} handleTasks={handleTasks}
                             showAllUsers={showAllUsers} handleAllUsers={handleAllUsers} />);
 
-    
-    return (calendar === "day") 
-      ? <DayCalendar tasks={tasks} jobs={jobs} absences={absences} 
+    return (
+      <div>
+        <DayCalendar tasks={tasks} jobs={jobs} absences={absences} 
                       allUsers={allUsers} showAllUsers={showAllUsers} department={department} 
                       fromTo={fromTo} OptionsContainer={OptionsContainer} />
-                
-                
-      : (calendar === "week") 
-        ? <WeekCalendar tasks={tasks} jobs={jobs} absences={absences} 
-                      allUsers={allUsers} showAllUsers={showAllUsers} department={department} 
-                      fromTo={fromTo} OptionsContainer={OptionsContainer} />
-        : <p>{calendar}</p>
-  }
-}
 
-Calendar.prototype = {
-  calendar: PropTypes.string
+        <WeekCalendar tasks={tasks} jobs={jobs} absences={absences} 
+                      allUsers={allUsers} showAllUsers={showAllUsers} department={department} 
+                      fromTo={fromTo} OptionsContainer={OptionsContainer} />
+      </div>
+    )
+  }
 }
 
 export default Calendar;
