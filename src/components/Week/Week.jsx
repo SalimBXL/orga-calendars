@@ -47,7 +47,7 @@ const Week = ({user, tasks, jobs, absences}) => {
     return (
         <tr>
             <td> 
-                {user.fullname}
+                <strong>{user.fullname}</strong>
                 <br />
                 <small>
                     <span className = "badge bg-warning text-primary"

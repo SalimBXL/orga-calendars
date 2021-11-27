@@ -24,14 +24,18 @@ const Day = ({id, sunday, jobs, absence}) => {
     return (
         <td style={style} className={clsName}>
 
-            {absence.absence !== "Ma" && 
-                <span className = "absence"><sup><small>{absence.absence}</small></sup></span>
+            { (absence.absence !== "Co" ) && 
+                <span className = "absence">
+                    <sup>
+                        <small>{absence.absence}</small>
+                    </sup>
+                </span>
             }
 
             <div className = "job">
-                <span className = "badge bg-primary">
-                    {jobs && jobs.join(" ")}
-                </span>
+                <span className = "badge bg-primary">{jobs && jobs.am.join(" ")}</span>
+                <br />
+                <span className = "badge bg-info">{jobs && jobs.pm.join(" ")}</span>
             </div>
 
         </td>

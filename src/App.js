@@ -56,7 +56,8 @@ function App() {
           ));
           
           setPlanningJobs(result.planning_jobs.map((j) => {
-            return { "id": j.id, "date": j.date, "jobs": j.jobs, "user": myMap.get(j.user_id) }}
+            const _jobs = { "am": j.am, "pm": j.pm }
+            return { "id": j.id, "date": j.date, "jobs": _jobs, "user": myMap.get(j.user_id) }}
           ));
 
           setPlanningTasks(result.planning_tasks.map((t) => {
