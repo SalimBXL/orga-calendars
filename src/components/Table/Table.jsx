@@ -3,21 +3,26 @@ import PropTypes from 'prop-types';
 import Week from "../Week/Week"
 
 
-const Table = ({jobs, absences, allUsers}) => {
+const Table = ({tasks, jobs, absences, allUsers, showAllUsers}) => {
 
     const users = [];
 
     if (allUsers && allUsers.length > 0) users.push(...allUsers);
 
     jobs.map(({user}) => (!users.includes(user)) && users.push(user))
+    tasks.map(({user}) => (!users.includes(user)) && users.push(user))
     absences.map(({user}) => (!users.includes(user)) && users.push(user))
 
     const rows = []
     users.map((user) => {
         const jbs = jobs.filter((j) => j.user.id === user.id)
+        const tsks = tasks.filter((t) => t.user.id === user.id)
         const abs = absences.filter((a) => a.user.id === user.id)
         const key = "week_user_id_" + user.id.toString(); 
-        rows.push(<Week key={key} user={user} jobs={jbs} absences={abs}/>)
+
+        (showAllUsers || tsks.length > 0 || jbs.length > 0) && rows.push(<Week key={key} user={user} tasks={tsks} jobs={jbs} absences={abs}/>)
+
+
         return null;
     })
     
@@ -42,7 +47,9 @@ const Table = ({jobs, absences, allUsers}) => {
 }
 
 Table.prototype = {
+    showAllUsers: PropTypes.bool,
     jobs: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
     absences: PropTypes.array.isRequired,
     allUsers: PropTypes.array
 }

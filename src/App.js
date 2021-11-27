@@ -3,9 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Options from "./components/Options/Options";
 import Table from "./components/Table/Table"
 
-//import { planning_jobs } from "./local-json/planning_jobs";
-//import { planning_absences } from "./local-json/planning_absences";
-//import { allUsers } from "./local-json/allUsers";
 
 function App() {
 
@@ -18,6 +15,14 @@ function App() {
   const handleJobs = ({target}) => { 
     setShowJobs((prev) => !prev)
     setJobs(!showJobs ? planningJobs : [])
+  }
+
+  const [planningTasks, setPlanningTasks] = useState([]);
+  const [showTasks, setShowTasks] = useState(true);
+  const [tasks, setTasks] = useState([]);
+  const handleTasks = ({target}) => {
+    setShowTasks((prev) => !prev);
+    setTasks(!showTasks ? planningTasks : []);
   }
 
   const [planningAbsences, setPlanningAbsences] = useState([]);
@@ -34,8 +39,6 @@ function App() {
     setShowAllUsers((prev) => !prev)
   }
 
-  
-
   useEffect(() => {
     const uri = "./local-json/week.json";
     fetch(uri, {headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' }})
@@ -43,15 +46,26 @@ function App() {
       .then(
         (result) => {
           setIsLoaded(true);
+
+          const myMap = new Map();
+          result.users.map((user) => myMap.set(user.id, user));
           setAllUsers(result.users);
 
           setPlanningAbsences(result.planning_absences.map((a) => {
-            return { "id": a.id, "date": a.date, "absence": a.absence, "confirmed": a.confirmed, "user": result.users[a.id] }}
+            return { "id": a.id, "date": a.date, "absence": a.absence, "confirmed": a.confirmed, "user": myMap.get(a.user_id) }}
           ));
           
           setPlanningJobs(result.planning_jobs.map((j) => {
-            return { "id": j.id, "date": j.date, "jobs": j.jobs, "user": result.users[j.id] }}
+            return { "id": j.id, "date": j.date, "jobs": j.jobs, "user": myMap.get(j.user_id) }}
           ));
+
+          setPlanningTasks(result.planning_tasks.map((t) => {
+            return { "id": t.id, "date": t.date, "code": t.code, "description": t.description, "user": myMap.get(t.user_id) }}
+          ));
+
+
+
+
         },
         (error) => {
           setIsLoaded(true);
@@ -63,6 +77,11 @@ function App() {
   useEffect(() => {
     setJobs(planningJobs);
   }, [planningJobs]);
+
+  useEffect(() => {
+    setTasks(planningTasks);
+  }, [planningTasks]);
+
 
   if(error) {
     return <div>Erreur : {error.message}</div>;
@@ -81,10 +100,11 @@ function App() {
           <Options 
             showJobs={showJobs} handleJobs={handleJobs}
             showAbsences={showAbsences} handleAbsences={handleAbsences}
+            showTasks={showTasks} handleTasks={handleTasks}
             showAllUsers={showAllUsers} handleAllUsers={handleAllUsers}
           />
 
-          <Table jobs={jobs} absences={absences} allUsers={showAllUsers && allUsers}/>
+          <Table tasks={tasks} jobs={jobs} absences={absences} showAllUsers={showAllUsers} allUsers={showAllUsers && allUsers}/>
         </div>
       </div>
     );

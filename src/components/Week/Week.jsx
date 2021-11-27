@@ -3,9 +3,15 @@ import PropTypes from 'prop-types';
 import Day from "../Day/Day"
 
 
-const Week = ({user, jobs, absences}) => {
+const Week = ({user, tasks, jobs, absences}) => {
     const days = [
-        { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""}, { j: "", a: ""},
+        { j: "", a: "", t:""}, 
+        { j: "", a: "", t:""}, 
+        { j: "", a: "", t:""}, 
+        { j: "", a: "", t:""}, 
+        { j: "", a: "", t:""}, 
+        { j: "", a: "", t:""}, 
+        { j: "", a: "", t:""}
     ]
 
     jobs.map((job) => {
@@ -25,9 +31,32 @@ const Week = ({user, jobs, absences}) => {
         return null;
     })
 
+    tasks.map((task) => {
+        const d = new Date(task.date)
+        const numeroJour = d.getDay()
+        days[numeroJour].t = {
+            code: task.code,
+            description: task.description
+        }
+        return null;
+    })
+
+  
+    const task = days[1].t;
+
     return (
-        <tr >
-            <td >{user.fullname}</td>
+        <tr>
+            <td> 
+                {user.fullname}
+                <br />
+                <small>
+                    <span className = "badge bg-warning text-primary"
+                        data-bs-toggle="tooltip" title={task.description}>
+                        {task.code}
+                    </span>
+                </small>
+            </td>
+
             {days.map((day, index) => 
                 (index !== 0) && (
                     (index !== 6)
@@ -46,6 +75,7 @@ const Week = ({user, jobs, absences}) => {
 Week.prototype = {
     user: PropTypes.string.isRequired,
     jobs: PropTypes.array,
+    tasks: PropTypes.array,
     absences: PropTypes.array
 }
 
