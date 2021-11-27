@@ -106,13 +106,17 @@ function App() {
         <div id="FilterableTable" className="container p-3 my-3 border">
 
           <div className="d-flex justify-content-between mb-3">
+
             <div className="p-2">
+
               <h2>Week Calendar</h2>
-              <span className="badge rounded-pill bg-secondary">
-                {fromTo.from} -- {fromTo.to}
-              </span>
+
+              <span className="badge rounded-pill bg-secondary">{fromTo.from} -- {fromTo.to}</span>
+
             </div>
-            <div className="p-2"><h4>{department.service} {department.location}</h4></div>
+
+            <div className="p-2 department"><h4>{department.service} {department.location}</h4></div>
+
           </div>
 
 
