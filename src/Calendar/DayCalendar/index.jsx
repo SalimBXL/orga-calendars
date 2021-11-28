@@ -1,12 +1,10 @@
 import React from "react";
-import Navbar from "../Navbar/Navbar";
 import PropTypes from 'prop-types';
 import Table from "../components/Table/Table"
 
 const DayCalendar = ({tasks, jobs, absences, allUsers, showAllUsers, department, fromTo, OptionsContainer}) => (
     
     <>
-    <Navbar />
 
     <div id="FilterableTable">
 

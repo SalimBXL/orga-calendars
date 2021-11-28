@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import DayCalendar from "./DayCalendar"
 import WeekCalendar from "./WeekCalendar"
+import Navbar from "./Navbar/Navbar"
 import Options from "./components/Options/Options";
 
 const Calendar = () => {
@@ -10,6 +11,11 @@ const Calendar = () => {
 
   const [department, setDepartment] = useState("");
   const [fromTo, setFromTo] = useState({});
+
+  const [pageToShow, setPageToShow] = useState("");
+  const handlePage = (page) => {
+    setPageToShow(page);
+  }
   
   const [planningJobs, setPlanningJobs] = useState([]);
   const [showJobs, setShowJobs] = useState(true);
@@ -98,20 +104,32 @@ const Calendar = () => {
     return <div>Retrieving data from server...</div>;
   } else {
 
-    const OptionsContainer = () => (<Options  showJobs={showJobs} handleJobs={handleJobs}
-                            showAbsences={showAbsences} handleAbsences={handleAbsences}
-                            showTasks={showTasks} handleTasks={handleTasks}
-                            showAllUsers={showAllUsers} handleAllUsers={handleAllUsers} />);
+    const CalenderToShow = () => (pageToShow === "day") 
+      ? <DayCalendar tasks={tasks} jobs={jobs} absences={absences} 
+                      allUsers={allUsers} showAllUsers={showAllUsers} department={department} 
+                      fromTo={fromTo} OptionsContainer={OptionsContainer} />
+      : (pageToShow === "week")
+        ? <WeekCalendar tasks={tasks} jobs={jobs} absences={absences} 
+                      allUsers={allUsers} showAllUsers={showAllUsers} department={department} 
+                      fromTo={fromTo} OptionsContainer={OptionsContainer} />
+        : <p>MONTH</p>
+
+    const OptionsContainer = () => (
+      <Options  showJobs={showJobs} handleJobs={handleJobs}
+                showAbsences={showAbsences} handleAbsences={handleAbsences}
+                showTasks={showTasks} handleTasks={handleTasks}
+                showAllUsers={showAllUsers} handleAllUsers={handleAllUsers} />);
+
 
     return (
       <div>
-        <DayCalendar tasks={tasks} jobs={jobs} absences={absences} 
-                      allUsers={allUsers} showAllUsers={showAllUsers} department={department} 
-                      fromTo={fromTo} OptionsContainer={OptionsContainer} />
 
-        <WeekCalendar tasks={tasks} jobs={jobs} absences={absences} 
-                      allUsers={allUsers} showAllUsers={showAllUsers} department={department} 
-                      fromTo={fromTo} OptionsContainer={OptionsContainer} />
+        <Navbar handleDay={()=>handlePage("day")} 
+                handleWeek={()=>handlePage("week")} 
+                handleMonth={()=>handlePage("month")} />
+
+        <CalenderToShow />
+
       </div>
     )
   }
