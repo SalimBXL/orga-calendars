@@ -41,33 +41,25 @@ const Week = ({user, tasks, jobs, absences}) => {
         return null;
     })
 
-  
+    const ReturnDay = ({index, day}) => (index !== 6)
+            ? <Day id={index} sunday={false} 
+                    key={"user_id_"+ user.id +"_day_" + index.toString()} 
+                    jobs={day.j} absence={day.a} />
+            : <Day id={index} sunday={true} 
+                    key={"user_id_"+ user.id +"day_" + index.toString()} 
+                    jobs={day.j} absence={day.a} />
+
     const task = days[1].t;
 
     return (
         <tr>
-            <td> 
-                <strong>{user.fullname}</strong>
-                <br />
-                <small>
-                    <span className = "badge bg-warning text-primary"
+            <td><strong>{user.fullname}</strong><br />
+                <small><span className = "badge bg-warning text-primary"
                         data-bs-toggle="tooltip" title={task.description}>
                         {task.code}
-                    </span>
-                </small>
+                </span></small>
             </td>
-
-            {days.map((day, index) => 
-                (index !== 0) && (
-                    (index !== 6)
-                        ? <Day id={index} sunday={false} 
-                                key={"user_id_"+ user.id +"_day_" + index.toString()} 
-                                jobs={day.j} absence={day.a} />
-                        : <Day id={index} sunday={true} 
-                                key={"user_id_"+ user.id +"day_" + index.toString()} 
-                                jobs={day.j} absence={day.a} />
-                )
-            )}
+            {days.map((day, index) => (index !== 0) && <ReturnDay index={index} day={day} />)}
         </tr>
     )
 }
