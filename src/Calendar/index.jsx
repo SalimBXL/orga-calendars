@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react"
+import PropTypes from 'prop-types';
 import DayCalendar from "./DayCalendar"
 import WeekCalendar from "./WeekCalendar"
 import Navbar from "./Navbar/Navbar"
 import Options from "./components/Options/Options";
 
-const Calendar = () => {
+const Calendar = ({url, date}) => {
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -48,10 +49,10 @@ const Calendar = () => {
   }
 
   useEffect(() => {
-    
-    const uri = "./local-json/week.json";
-    
-    fetch(uri, {headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' }})
+        
+    fetch(url, 
+        {headers : { 'Content-Type': 'application/json', 'Accept': 'application/json' }}
+      )
       .then(res => res.json())
       .then(
         (result) => {
@@ -83,7 +84,7 @@ const Calendar = () => {
           setError(error);
         }
       );
-  }, []);
+  }, [url]);
 
   useEffect(() => {
     setJobs(planningJobs);
@@ -123,6 +124,7 @@ const Calendar = () => {
 
     return (
       <div>
+        <p>{date.toString()}</p>
 
         <Navbar handleDay={()=>handlePage("day")} 
                 handleWeek={()=>handlePage("week")} 
@@ -133,6 +135,15 @@ const Calendar = () => {
       </div>
     )
   }
+}
+
+Calendar.prototype = {
+  url: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired
+}
+
+Calendar.defaultProps = {
+  date: (new Date()).toJSON()
 }
 
 export default Calendar;
